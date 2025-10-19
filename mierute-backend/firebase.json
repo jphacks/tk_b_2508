@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "source": ".",
+    "runtime": "nodejs20",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "**/*.spec.ts",
+      "**/*.test.ts",
+      "test/**",
+      ".env*",
+      "README.md"
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
