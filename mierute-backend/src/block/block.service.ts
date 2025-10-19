@@ -56,7 +56,7 @@ export class BlockService {
       const blocks = await this.firestoreService.findAll(this.collectionName, {
         where: [
           {
-            field: 'projectId',
+            field: 'project_id',
             operator: '==',
             value: projectId,
           },
@@ -127,7 +127,7 @@ export class BlockService {
     return {
       id: block.id as string,
       checkpoint: block.checkpoint as string,
-      achivement: block.achivement as string,
+      achievement: block.achievement as string,
       projectId: block.projectId as string,
       img_url: block.img_url || null, // undefinedをnullに変換してJSONに確実に含める
       createdAt: block.createdAt as string,

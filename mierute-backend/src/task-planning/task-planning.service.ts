@@ -32,7 +32,7 @@ export class TaskPlanningService {
       for (const task of planResponse.tasks) {
         const createBlockDto: CreateBlockDto = {
           checkpoint: task.checkpoint,
-          achivement: task.achivement,
+          achievement: task.achievement,
           projectId: dto.projectId,
         };
 
@@ -42,7 +42,7 @@ export class TaskPlanningService {
           block_id: blockResponse.id,
           title: task.title,
           checkpoint: task.checkpoint,
-          achivement: task.achivement,
+          achievement: task.achievement,
         });
 
         blockIds.push(blockResponse.id);

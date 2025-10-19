@@ -397,9 +397,9 @@ https://github.com/user-attachments/assets/3e6338f9-5a27-45ec-a083-3ecd7ba3f947
 ```bash
 cd mierute-frontend
 npm install
-cp .env.example .env  # Firebase設定を記述
-npm run dev           # 開発サーバー起動 (localhost:3000)
-npm run build         # プロダクションビルド
+cp .env.local.example .env.local  # Firebase設定を記述
+npm run dev                        # 開発サーバー起動 (localhost:3000)
+npm run build                      # プロダクションビルド
 ```
 
 ## Backend

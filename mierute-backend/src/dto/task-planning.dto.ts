@@ -15,7 +15,7 @@ export interface Task {
   title: string;
   description: string;
   checkpoint: string;
-  achivement: string;
+  achievement: string;
   estimatedTime?: string;
   priority?: 'high' | 'medium' | 'low';
   dependencies?: string[];
@@ -25,7 +25,7 @@ export interface SavedBlock {
   block_id: string;
   title: string;
   checkpoint: string;
-  achivement: string;
+  achievement: string;
 }
 
 export class TaskPlanningResponseDto {

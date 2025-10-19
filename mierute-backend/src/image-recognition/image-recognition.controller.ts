@@ -42,18 +42,18 @@ export class ImageRecognitionController {
       console.log(`[${requestId}] Block情報取得成功:`, {
         id: dto.block_id,
         checkpoint: block.checkpoint,
-        achivement: block.achivement,
+        achievement: block.achievement,
         projectId: block.projectId
       });
 
       const checkpoint = block.checkpoint as string;
-      const achivement = block.achivement as string;
+      const achievement = block.achievement as string;
 
       console.log(`[${requestId}] OpenAI画像解析開始...`);
       const score = await this.openaiService.analyzeImageWithCheckpoint(
         dto.image_url,
         checkpoint,
-        achivement,
+        achievement,
       );
 
       console.log(`[${requestId}] OpenAI画像解析完了 - スコア: ${score}`);

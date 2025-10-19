@@ -8,7 +8,7 @@ export class CreateBlockDto {
 
   @IsString()
   @IsNotEmpty()
-  achivement: string;
+  achievement: string;
 
   @IsString()
   @IsNotEmpty()
@@ -25,7 +25,7 @@ export class UpdateBlockDto extends PartialType(CreateBlockDto) {}
 export class BlockResponseDto {
   id: string;
   checkpoint: string;
-  achivement: string;
+  achievement: string;
   projectId: string;
   img_url?: string;
   createdAt: string;

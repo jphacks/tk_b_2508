@@ -36,7 +36,7 @@ export class ProjectService {
     const projects = await this.firestoreService.findAll(this.collectionName, {
       where: [
         {
-          field: 'companyId',
+          field: 'company_id',
           operator: '==',
           value: companyId,
         },

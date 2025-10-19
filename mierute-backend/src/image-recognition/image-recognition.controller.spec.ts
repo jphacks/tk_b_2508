@@ -12,7 +12,7 @@ describe('ImageRecognitionController', () => {
 
   const mockBlock = {
     checkpoint: 'データベース設計の完了',
-    achivement: 'ER図が作成され、テーブル構造が明確に定義されている',
+    achievement: 'ER図が作成され、テーブル構造が明確に定義されている',
     projectId: 'test-project-id',
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
@@ -68,7 +68,7 @@ describe('ImageRecognitionController', () => {
       expect(openaiService.analyzeImageWithCheckpoint).toHaveBeenCalledWith(
         mockRequest.image_url,
         mockBlock.checkpoint,
-        mockBlock.achivement
+        mockBlock.achievement
       );
     });
 
@@ -83,7 +83,7 @@ describe('ImageRecognitionController', () => {
       expect(openaiService.analyzeImageWithCheckpoint).toHaveBeenCalledWith(
         mockRequest.image_url,
         mockBlock.checkpoint,
-        mockBlock.achivement
+        mockBlock.achievement
       );
     });
 

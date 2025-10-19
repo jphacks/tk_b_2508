@@ -17,6 +17,60 @@ export class FirestoreService {
     this.db = this.firebaseService.admin.firestore();
   }
 
+  // Convert camelCase fields to snake_case for database storage
+  private convertToDbFields(data: any): any {
+    if (!data || typeof data !== 'object') return data;
+    
+    const converted = { ...data };
+    
+    // Convert specific camelCase fields to snake_case
+    if (converted.projectId !== undefined) {
+      converted.project_id = converted.projectId;
+      delete converted.projectId;
+    }
+    if (converted.companyId !== undefined) {
+      converted.company_id = converted.companyId;
+      delete converted.companyId;
+    }
+    if (converted.createdAt !== undefined) {
+      converted.created_at = converted.createdAt;
+      delete converted.createdAt;
+    }
+    if (converted.updatedAt !== undefined) {
+      converted.updated_at = converted.updatedAt;
+      delete converted.updatedAt;
+    }
+    
+    return converted;
+  }
+
+  // Convert snake_case fields to camelCase for API responses
+  private convertFromDbFields(data: any): any {
+    if (!data || typeof data !== 'object') return data;
+    
+    const converted = { ...data };
+    
+    // Convert specific snake_case fields to camelCase
+    if (converted.project_id !== undefined) {
+      converted.projectId = converted.project_id;
+      delete converted.project_id;
+    }
+    if (converted.company_id !== undefined) {
+      converted.companyId = converted.company_id;
+      delete converted.company_id;
+    }
+    if (converted.created_at !== undefined) {
+      converted.createdAt = converted.created_at;
+      delete converted.created_at;
+    }
+    if (converted.updated_at !== undefined) {
+      converted.updatedAt = converted.updated_at;
+      delete converted.updated_at;
+    }
+    
+    return converted;
+  }
+
   getCollection(collectionPath: string): CollectionReference {
     return this.db.collection(collectionPath);
   }
@@ -31,20 +85,17 @@ export class FirestoreService {
     documentId?: string,
   ): Promise<string> {
     const collection = this.getCollection(collectionPath);
+    const dbData = this.convertToDbFields({
+      ...data,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
 
     if (documentId) {
-      await collection.doc(documentId).set({
-        ...data,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+      await collection.doc(documentId).set(dbData);
       return documentId;
     } else {
-      const docRef = await collection.add({
-        ...data,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+      const docRef = await collection.add(dbData);
       return docRef.id;
     }
   }
@@ -59,9 +110,10 @@ export class FirestoreService {
       return null;
     }
 
+    const data = doc.data();
     return {
       id: doc.id,
-      ...doc.data(),
+      ...this.convertFromDbFields(data),
     };
   }
 
@@ -100,7 +152,7 @@ export class FirestoreService {
 
     return snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data(),
+      ...this.convertFromDbFields(doc.data()),
     }));
   }
 
@@ -110,11 +162,12 @@ export class FirestoreService {
     data: any,
   ): Promise<void> {
     const docRef = this.getDocument(collectionPath, documentId);
-
-    await docRef.update({
+    const dbData = this.convertToDbFields({
       ...data,
-      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     });
+
+    await docRef.update(dbData);
   }
 
   async delete(collectionPath: string, documentId: string): Promise<void> {
@@ -139,17 +192,17 @@ export class FirestoreService {
 
       switch (op.type) {
         case 'create':
-          batch.set(docRef, {
+          batch.set(docRef, this.convertToDbFields({
             ...op.data,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          });
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }));
           break;
         case 'update':
-          batch.update(docRef, {
+          batch.update(docRef, this.convertToDbFields({
             ...op.data,
-            updatedAt: new Date().toISOString(),
-          });
+            updated_at: new Date().toISOString(),
+          }));
           break;
         case 'delete':
           batch.delete(docRef);
@@ -210,7 +263,7 @@ export class FirestoreService {
     const hasMore = docs.length > pageSize;
     const data = docs.slice(0, pageSize).map((doc) => ({
       id: doc.id,
-      ...doc.data(),
+      ...this.convertFromDbFields(doc.data()),
     }));
 
     const lastDoc =

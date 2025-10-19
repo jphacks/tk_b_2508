@@ -17,7 +17,7 @@ export class OpenAIService {
   async analyzeImageWithCheckpoint(
     imageUrl: string,
     checkpoint: string,
-    achivement: string,
+    achievement: string,
   ): Promise<number> {
     const requestStartTime = new Date().toISOString();
     
@@ -25,13 +25,13 @@ export class OpenAIService {
       console.log(`[画像認識開始] ${requestStartTime}`);
       console.log(`画像URL: ${imageUrl}`);
       console.log(`チェックポイント: ${checkpoint}`);
-      console.log(`達成条件: ${achivement}`);
+      console.log(`達成条件: ${achievement}`);
 
       const prompt = `あなたは画像を分析して、指定されたチェックポイントとその達成条件に対してどの程度満たしているかを評価するAIです。
 
 【評価対象】
 チェックポイント（目標）: ${checkpoint}
-達成条件（具体的な条件）: ${achivement}
+達成条件（具体的な条件）: ${achievement}
 
 【評価手順】
 画像を詳しく観察し、以下の手順で評価してください：
@@ -94,7 +94,7 @@ export class OpenAIService {
       console.error('リクエスト開始時刻:', requestStartTime);
       console.error('画像URL:', imageUrl);
       console.error('チェックポイント:', checkpoint);
-      console.error('達成条件:', achivement);
+      console.error('達成条件:', achievement);
       console.error('エラータイプ:', error.constructor.name);
       console.error('エラーメッセージ:', error.message);
       
@@ -164,7 +164,7 @@ export class OpenAIService {
       "title": "タスクのタイトル",
       "description": "タスクの詳細説明",
       "checkpoint": "このタスクで達成したい目標",
-      "achivement": "具体的な完了条件・評価基準",
+      "achievement": "具体的な完了条件・評価基準",
       "estimatedTime": "予想時間",
       "priority": "high|medium|low",
       "dependencies": ["依存するタスクのID配列"]
@@ -177,8 +177,8 @@ export class OpenAIService {
 2. 依存関係を明確にしてください
 3. 現実的な時間見積もりを行ってください
 4. 優先度を適切に設定してください
-5. checkpoint（目標）とachivement（達成条件）を明確に分けてください
-6. achivementは後で画像認識で評価できるような具体的な条件にしてください
+5. checkpoint（目標）とachievement（達成条件）を明確に分けてください
+6. achievementは後で画像認識で評価できるような具体的な条件にしてください
 7. 必ずJSONフォーマットで回答してください`;
 
       console.log('OpenAI API呼び出し開始 (タスクプランニング)...');

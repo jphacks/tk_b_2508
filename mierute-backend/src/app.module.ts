@@ -7,6 +7,7 @@ import { ImageRecognitionModule } from './image-recognition/image-recognition.mo
 import { ProjectModule } from './project/project.module';
 import { BlockModule } from './block/block.module';
 import { TaskPlanningModule } from './task-planning/task-planning.module';
+import { RagModule } from './rag/rag.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TaskPlanningModule } from './task-planning/task-planning.module';
     ProjectModule,
     BlockModule,
     TaskPlanningModule,
+    RagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
