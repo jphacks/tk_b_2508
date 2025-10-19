@@ -428,7 +428,7 @@ npm run deploy        # Firebase Functionsへデプロイ
 
 ## iOS App
 
-1. `MIERUTE/MIERUTE.xcodeproj` をXcodeで開く
+1. 環境変数を.plistで配置
 2. Firebase Consoleから `GoogleService-Info.plist` をダウンロード
 3. `MIERUTE/MIERUTE/` 配下に `GoogleService-Info.plist` を配置
 4. Signing & Capabilities でチーム設定
