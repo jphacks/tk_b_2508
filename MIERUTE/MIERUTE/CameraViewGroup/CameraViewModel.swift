@@ -23,10 +23,9 @@ final class CameraViewModel: ObservableObject {
     private let defaultProjectId = "vQxQsGgzeEDUt5I45oBv"
 
     init() {
-        // 起動時に実際のAPIからデータを取得
-        Task {
-            await loadInstructionsFromAPI()
-        }
+        // 初期状態はスキャニングモード（手順なし）
+        self.instructions = []
+        self.appState = .scanning
     }
 
     private func loadInstructionsFromAPI() async {

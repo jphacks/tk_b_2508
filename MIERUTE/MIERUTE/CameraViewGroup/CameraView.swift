@@ -16,13 +16,14 @@ struct CameraView: View {
     @State private var showChat = false
     @State private var rippleCounter: Int = 0
     @State private var rippleOrigin: CGPoint = .zero
-    @State private var longPressTask: Task<Void, Never>?
     @State private var capturedPhotoForDisplay: UIImage?
     @State private var showPhotoActions: Bool = false
     @State private var photoScale: CGFloat = 1.0
     @State private var stepNodeHeight: CGFloat = 130
     @State private var cachedImage: UIImage?
     @State private var confettiTrigger: Int = 0
+    @State private var hasDetectedGoodSign: Bool = OnboardingService.hasDetectedGoodSign()
+    @State private var showManualCreation = false
 
     private var validStepNodeHeight: CGFloat {
         max(stepNodeHeight, 130)
@@ -56,6 +57,9 @@ struct CameraView: View {
             .sheet(isPresented: .constant(viewModel.appState.isDisplayingInstructions)) {
                 instructionSheet
             }
+            .fullScreenCover(isPresented: $showManualCreation) {
+                ManualCreationView()
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbarContent }
         }
@@ -74,8 +78,13 @@ struct CameraView: View {
     private var overlayContent: some View {
         Group {
             if case .scanning = viewModel.appState {
-                QRScannerOverlay()
-                    .allowsHitTesting(false)
+                if !hasDetectedGoodSign {
+                    TutorialInstructionView()
+                        .allowsHitTesting(false)
+                } else {
+                    QRScannerOverlay()
+                        .allowsHitTesting(false)
+                }
             }
 
             if case .loading = viewModel.appState {
@@ -91,7 +100,14 @@ struct CameraView: View {
 
     private var longPressGestureArea: some View {
         Group {
-            if !showPhotoActions {
+            let canCapture: Bool = {
+                if showPhotoActions { return false }
+                if viewModel.appState.isDisplayingInstructions { return true }
+                if case .scanning = viewModel.appState, !hasDetectedGoodSign { return true }
+                return false
+            }()
+
+            if canCapture {
                 Color.clear
                     .contentShape(Rectangle())
                     .onPressingChanged(handleLongPress)
@@ -148,6 +164,12 @@ struct CameraView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        leadingToolbarItem
+        trailingToolbarItem
+    }
+
+    @ToolbarContentBuilder
+    private var leadingToolbarItem: some ToolbarContent {
         if capturedPhotoForDisplay != nil {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: cancelPhoto) {
@@ -157,35 +179,52 @@ struct CameraView: View {
                         .symbolRenderingMode(.hierarchical)
                 }
             }
+        }
+    }
 
+    @ToolbarContentBuilder
+    private var trailingToolbarItem: some ToolbarContent {
+        if capturedPhotoForDisplay != nil {
             if showPhotoActions {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: confirmPhoto) {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 18))
-                            .foregroundColor(.blue)
-                            .symbolRenderingMode(.hierarchical)
-                    }
+                    confirmPhotoButton
                 }
             }
-
-            if !showPhotoActions && viewModel.appState.isDisplayingInstructions {
+        } else {
+            if case .scanning = viewModel.appState, hasDetectedGoodSign {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showChat = true }) {
-                        Image(systemName: "message")
-                            .font(.system(size: 18))
-                            .foregroundColor(.white)
-                    }
+                    plusButton
+                }
+            } else if viewModel.appState.isDisplayingInstructions {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    chatButton
                 }
             }
-        } else if viewModel.appState.isDisplayingInstructions {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: { showChat = true }) {
-                    Image(systemName: "message")
-                        .font(.system(size: 18))
-                        .foregroundColor(.white)
-                }
-            }
+        }
+    }
+
+    private var confirmPhotoButton: some View {
+        Button(action: confirmPhoto) {
+            Image(systemName: "checkmark")
+                .font(.system(size: 18))
+                .foregroundColor(.blue)
+                .symbolRenderingMode(.hierarchical)
+        }
+    }
+
+    private var plusButton: some View {
+        Button(action: handlePlusButton) {
+            Image(systemName: "plus")
+                .font(.system(size: 18))
+                .foregroundColor(.white)
+        }
+    }
+
+    private var chatButton: some View {
+        Button(action: { showChat = true }) {
+            Image(systemName: "message")
+                .font(.system(size: 18))
+                .foregroundColor(.white)
         }
     }
 
@@ -223,22 +262,45 @@ struct CameraView: View {
             rippleCounter += 1
 
             try? await Task.sleep(nanoseconds: 500_000_000)
-            showPhotoActions = true
+
+            // チュートリアル中（.scanning状態 + グッドサイン未検出）の場合、グッドサイン検出を実行
+            if case .scanning = viewModel.appState, !hasDetectedGoodSign {
+                do {
+                    let isGoodSign = try await GoodSignDetectionService.detectGoodSign(in: image)
+
+                    if isGoodSign {
+                        print("✅ Good sign detected!")
+                        hasDetectedGoodSign = true
+                        OnboardingService.completeGoodSignDetection()
+                        confettiTrigger += 1
+
+                        // 写真を消すアニメーション
+                        try? await Task.sleep(nanoseconds: 500_000_000)
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            photoScale = 0
+                        }
+                        try? await Task.sleep(nanoseconds: 300_000_000)
+                        capturedPhotoForDisplay = nil
+                        photoScale = 1.0
+                    } else {
+                        print("❌ Good sign not detected, showing retry button")
+                        showPhotoActions = true
+                    }
+                } catch {
+                    print("❌ Good sign detection failed: \(error)")
+                    showPhotoActions = true
+                }
+            } else {
+                // 通常モード（手順表示中 or グッドサイン検出済み）
+                showPhotoActions = true
+            }
         }
     }
 
     private func handleLongPress(point: CGPoint?) {
         if let point = point {
             rippleOrigin = point
-            longPressTask?.cancel()
-
-            longPressTask = Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                viewModel.capturePhoto()
-            }
-        } else {
-            longPressTask?.cancel()
-            longPressTask = nil
+            viewModel.capturePhoto()
         }
     }
 
@@ -315,6 +377,10 @@ struct CameraView: View {
                 photoScale = 1.0
             }
         }
+    }
+
+    private func handlePlusButton() {
+        showManualCreation = true
     }
 }
 

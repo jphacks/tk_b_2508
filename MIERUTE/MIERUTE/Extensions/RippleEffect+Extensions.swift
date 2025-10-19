@@ -124,7 +124,7 @@ struct SpatialPressingGesture: UIGestureRecognizerRepresentable {
 
     func makeUIGestureRecognizer(context: Context) -> UILongPressGestureRecognizer {
         let recognizer = UILongPressGestureRecognizer()
-        recognizer.minimumPressDuration = 0
+        recognizer.minimumPressDuration = 1.0
         recognizer.delegate = context.coordinator
 
         return recognizer

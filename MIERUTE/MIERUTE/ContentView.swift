@@ -9,10 +9,22 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var cameraViewModel = CameraViewModel()
+    @State private var showOnboarding = !OnboardingService.hasCompletedOnboarding()
 
     var body: some View {
-        CameraView(viewModel: cameraViewModel)
-            .preferredColorScheme(.light)
+        Group {
+            if showOnboarding {
+                OnboardingView(onComplete: {
+                    OnboardingService.completeOnboarding()
+                    withAnimation {
+                        showOnboarding = false
+                    }
+                })
+            } else {
+                CameraView(viewModel: cameraViewModel)
+            }
+        }
+        .preferredColorScheme(.light)
     }
 }
 
