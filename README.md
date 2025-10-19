@@ -1,6 +1,6 @@
 # MIERUTE（ミエルテ）
 
-[![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2025/05/JPHACKS2025_ogp.jpg)](https://www.youtube.com/watch?v=lA9EluZugD8)
+<img width="1024" height="1024" alt="Gemini_Generated_Image_kin59qkin59qkin5" src="https://github.com/user-attachments/assets/e7cc19ec-d421-43d0-aa32-aa6ad4085a01" />
 
 Webフロント
 https://mierute.vercel.app/
@@ -157,6 +157,10 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 **従来との比較**:
 - 従来: 静止画やテキストで「どれを使うか」を判断（認識ミスのリスク）
 - MIERUTE: カメラで映すだけで対象物を自動認識し、AR表示で迷わない
+
+**イメージ動画**:
+
+https://github.com/user-attachments/assets/3c99563c-2bb2-4506-9ad0-afea8d335d29
 
 ---
 
@@ -422,3 +426,5 @@ npm run deploy        # Firebase Functionsへデプロイ
 3. `MIERUTE/MIERUTE/` 配下に `GoogleService-Info.plist` を配置
 4. Signing & Capabilities でチーム設定
 5. Product > Build でビルド実行
+
+[![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2025/05/JPHACKS2025_ogp.jpg)](https://www.youtube.com/watch?v=lA9EluZugD8)
