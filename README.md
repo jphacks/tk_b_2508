@@ -44,6 +44,16 @@ https://testflight.apple.com/join/EPs78pM9
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
+**デモ動画**:
+
+**iOSアプリ**:
+
+[![iOSアプリデモ](https://img.youtube.com/vi/CVUiF58ioX4/maxresdefault.jpg)](https://www.youtube.com/watch?v=CVUiF58ioX4&list=PLn8JYw6Jow4BRznc0Dklxk-r7BjBHR0MD)
+
+**Webフロント**:
+
+[![Webフロントデモ](https://img.youtube.com/vi/QQu6_FCnxQY/maxresdefault.jpg)](https://www.youtube.com/watch?v=QQu6_FCnxQY&list=PLn8JYw6Jow4BRznc0Dklxk-r7BjBHR0MD&index=2)
+
 ### ワークフロー
 
 1. **マニュアル作成（Web）**: 自然言語を入力すると、最適なマニュアルを自動生成し、ブロック化
