@@ -123,6 +123,10 @@ CoreMotionによるデバイス傾き検出と連動し、デバイスを傾け�
 - 機械の分解・組立時に内部構造を3D表示
 - 動画による詳細な手順説明の補足
 
+**イメージ動画**:
+
+https://github.com/user-attachments/assets/12b2c6df-b7af-4cc4-8a62-39e6c756465d
+
 ---
 
 ### 2. iOS Foundation Model Tool Calling
@@ -156,7 +160,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 ---
 
-#### 4. インタラクティブチュートリアル機能
+### 4. インタラクティブチュートリアル機能
 
 **機能**:
 - 初回利用時の対話型チュートリアル
@@ -184,7 +188,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 ---
 
-#### 5. 複数人同時利用とリアルタイム共有
+### 5. 複数人同時利用とリアルタイム共有
 
 **機能**:
 - 複数人で同じマニュアルを同時に利用
@@ -199,7 +203,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 ---
 
-#### 6. 会社アカウントと統一管理
+### 6. 会社アカウントと統一管理
 
 **機能**:
 - 会社アカウントの追加
@@ -214,7 +218,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 ---
 
-#### 7. 多言語対応
+### 7. 多言語対応
 
 **機能**:
 - GPT-4によるマニュアルの自動翻訳
@@ -232,7 +236,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 ### toB展開（企業向けソリューション）
 
-#### 1. エンタープライズ向け機能拡張
+**1. エンタープライズ向け機能拡張**
 
 **マニュアルマーケットプレイス**:
 - 企業が作成したマニュアルを公開・販売
@@ -246,7 +250,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 - 教育: 実験・実習手順をデジタル化し、学生の自主学習を支援
 - サービス業: 店舗オペレーションマニュアルをチェーン全体で統一管理
 
-#### 2. 既存マニュアルのデジタル化とアップデート
+**2. 既存マニュアルのデジタル化とアップデート**
 
 **家具メーカー・小売業との連携**:
 - IKEAやニトリなどの家具組み立てマニュアルをMIERUTEでデジタル化
@@ -269,7 +273,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 ### toC展開（個人ユーザー向け）
 
-#### 誰でも簡単にマニュアルを作成・保存
+**誰でも簡単にマニュアルを作成・保存**
 
 **コンセプト**: 「デジタルに疎い人でも、家族や自分のためのマニュアルを簡単に作れる」
 
@@ -303,9 +307,9 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 # 開発技術
 
-### 活用した技術
+## 活用した技術
 
-#### API・データ
+### API・データ
 
 * **OpenAI GPT-4o API** - 自然言語からのタスクプラン自動生成
 * **OpenAI Vision API** - 画像解析による進捗確認（100点満点評価）
@@ -314,11 +318,11 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 * **Firebase Cloud Storage** - 画像ファイル保存
 * **Firebase Cloud Functions** - バックエンドホスティング
 
-#### デプロイ・ホスティング
+### デプロイ・ホスティング
 
 * **Vercel** - Webフロントエンドのデプロイ・ホスティング
 
-#### フレームワーク・ライブラリ・モジュール
+### フレームワーク・ライブラリ・モジュール
 
 **iOS**:
 * **SwiftUI** - 宣言的UIフレームワーク
@@ -341,7 +345,7 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 * **@nestjs/config** - 環境変数管理
 * **multer** - マルチパート/フォームデータ処理（画像アップロード）
 
-#### デバイス
+### デバイス
 
 * **iPhone** - iOS 17以降（Metal対応デバイス）
 * **カメラ** - Vision API用の画像取得
@@ -349,9 +353,9 @@ iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイ
 
 ---
 
-### 独自技術
+## 独自技術
 
-#### ハッカソンで開発した独自機能・技術
+### ハッカソンで開発した独自機能・技術
 
 **1. Metal Shading Languageを活用したGPU駆動エフェクト**
 
@@ -389,7 +393,7 @@ SwiftUIに**Metal Shading Languageを直接統合**し、CPUオーバーヘッ�
 
 # ビルド手順
 
-### Web Frontend
+## Web Frontend
 
 ```bash
 cd mierute-frontend
@@ -399,7 +403,7 @@ npm run dev           # 開発サーバー起動 (localhost:3000)
 npm run build         # プロダクションビルド
 ```
 
-### Backend
+## Backend
 
 ```bash
 cd mierute-backend
@@ -411,7 +415,7 @@ npm run deploy        # Firebase Functionsへデプロイ
 
 **Firebase設定**: `firebase.json` と `.firebaserc` を配置し、`firebase login` で認証
 
-### iOS App
+## iOS App
 
 1. `MIERUTE/MIERUTE.xcodeproj` をXcodeで開く
 2. Firebase Consoleから `GoogleService-Info.plist` をダウンロード
