@@ -159,6 +159,8 @@ https://github.com/user-attachments/assets/12b2c6df-b7af-4cc4-8a62-39e6c756465d
 ### 2. iOS Foundation Model Tool Calling
 
 iOS 26以降の**Apple Intelligence**（on-device LLM）を活用し、デバイス上で完結する処理を実現します。
+tool Callingを使うことで、web検索APIの呼び出しや画像取得、RAG資料のより効果的な活用など、インタラクティブ性を増すことを想定しています。
+また、作業内容によってはオフラインでの利用も想定されるため、その時にも動作するチャット機能の実装も可能です。
 
 ---
 
