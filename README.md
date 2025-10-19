@@ -1,6 +1,6 @@
 # MIERUTE（ミエルテ）
 
-<img width="1024" height="1024" alt="Gemini_Generated_Image_kin59qkin59qkin5" src="https://github.com/user-attachments/assets/e7cc19ec-d421-43d0-aa32-aa6ad4085a01" />
+<img width="1024" height="368" alt="Gemini_Generated_Image_kin59qkin59qkin5" src="https://github.com/user-attachments/assets/069d2a84-9e02-4b24-a289-899b812981ff" />
 
 Webフロント
 https://mierute.vercel.app/
