@@ -374,13 +374,15 @@ https://github.com/user-attachments/assets/3e6338f9-5a27-45ec-a083-3ecd7ba3f947
 
 **技術実装**:
 * Create MLでの画像分類モデルの学習
-* グッドサインの有無を判別するバイナリ分類器
+* グッドサインの有無を判別する
 * Core ML統合によるオンデバイス推論（プライバシー保護）
 * リアルタイムカメラ映像からの高速判定
 
 **効果**:
 - ユーザーが実際に手を動かして操作を体験することで、直感的にアプリの使い方を理解
 - 外部API不要のオンデバイス処理により、低レイテンシーと高いプライバシー性を実現
+
+<img width="1532" height="880" alt="スクリーンショット 2025-10-20 7 50 26" src="https://github.com/user-attachments/assets/bc3bc124-ab7b-41bb-aabb-638acd2f3d85" />
 
 ---
 
