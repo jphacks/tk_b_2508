@@ -59,14 +59,14 @@ struct StepNodeView: View {
                 .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(isPast ? Color.blue.opacity(0.1) : Color.gray.opacity(0.1))
+                        .fill(isPast ? Color("AppCyan").opacity(0.1) : Color.gray.opacity(0.1))
                 )
                 .padding(.horizontal, 16)
 
                 // Stroke with tilt shine (only when active)
                 if isActive {
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.blue, lineWidth: 2)
+                        .stroke(Color("AppCyan"), lineWidth: 2)
                         .tiltShine(tiltOffset: $tiltOffset, intensity: 0.2, shineWidth: 10)
                         .padding(.horizontal, 16)
                 }
@@ -75,7 +75,7 @@ struct StepNodeView: View {
             // Connecting Line between backgrounds
             if showLine {
                 Rectangle()
-                    .fill(lineIsActive ? Color.blue : Color.gray.opacity(0.3))
+                    .fill(lineIsActive ? Color("AppCyan") : Color.gray.opacity(0.3))
                     .frame(width: 3, height: 50)
             }
         }
@@ -83,7 +83,7 @@ struct StepNodeView: View {
     
     private var circleColor: Color {
         if isPast {
-            return .blue
+            return Color("AppCyan")
         } else if isActive {
             return Color.gray.opacity(0.3)
         } else {

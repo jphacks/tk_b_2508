@@ -15,7 +15,7 @@ struct TutorialInstructionView: View {
             VStack(spacing: 20) {
                 Image(systemName: "hand.thumbsup.fill")
                     .font(.system(size: 60))
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color("AppCyan"))
                     .symbolRenderingMode(.hierarchical)
 
                 Text("グッドサインで写真を撮る")

@@ -16,12 +16,19 @@ export default function ProjectCard({ project, onDelete }: ProjectCardProps) {
 
   return (
     <Link href={`/projects/${project.id}/edit`}>
-      <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-indigo-200 overflow-hidden transform hover:-translate-y-1 h-48">
+      <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer border border-gray-100 overflow-hidden transform hover:-translate-y-1 h-48"
+        onMouseEnter={(e) => e.currentTarget.style.borderColor = '#57CAEA40'}
+        onMouseLeave={(e) => e.currentTarget.style.borderColor = ''}
+      >
         <div className="p-6 h-full flex flex-col">
           {/* Header */}
           <div className="flex justify-between items-start mb-4">
             <div className="flex-1 pr-4 min-h-[3.5rem]">
-              <h3 className="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors line-clamp-2 overflow-hidden text-ellipsis">
+              <h3 className="text-xl font-bold text-gray-800 transition-colors line-clamp-2 overflow-hidden text-ellipsis"
+                style={{ color: 'inherit' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#57CAEA'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}
+              >
                 {project.name}
               </h3>
             </div>
@@ -41,12 +48,12 @@ export default function ProjectCard({ project, onDelete }: ProjectCardProps) {
 
           {/* Stats */}
           <div className="flex items-center justify-between text-sm mt-auto">
-            <div className="flex items-center space-x-2 px-3 py-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors">
-              <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors" style={{ backgroundColor: '#57CAEA20' }}>
+              <svg className="w-4 h-4" style={{ color: '#57CAEA' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
-              <span className="font-semibold text-indigo-700">{(project.blockOrderIds || []).length}</span>
-              <span className="text-indigo-600">ブロック</span>
+              <span className="font-semibold" style={{ color: '#57CAEA' }}>{(project.blockOrderIds || []).length}</span>
+              <span style={{ color: '#57CAEA' }}>ブロック</span>
             </div>
             <div className="flex items-center text-gray-500">
               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

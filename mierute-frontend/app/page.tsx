@@ -15,7 +15,7 @@ export default function Home() {
       if (isAuthenticated) {
         router.push('/projects');
       } else {
-        router.push('/login');
+        router.push('/landing');
       }
     }
   }, [isAuthenticated, isInitialized, router]);

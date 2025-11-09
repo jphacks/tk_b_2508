@@ -32,7 +32,8 @@
   checkpoint: string,
   achivement: string,  
   projectId: reference,
-  img_url?: string,       // 画像URL（オプショナル）
+  color?: string,             // 色情報（オプショナル）
+  reference_urls?: string[],  // 参照URL配列（オプショナル）
   createdAt: string,      
   updatedAt: string      
 }

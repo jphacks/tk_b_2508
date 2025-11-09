@@ -33,7 +33,7 @@ struct MessageInputView: View {
             }) {
                 Image(systemName: "arrow.up.circle.fill")
                     .font(.system(size: 32))
-                    .foregroundColor(text.isEmpty ? .gray : .blue)
+                    .foregroundColor(text.isEmpty ? .gray : Color("AppCyan"))
             }
             .disabled(text.isEmpty)
         }

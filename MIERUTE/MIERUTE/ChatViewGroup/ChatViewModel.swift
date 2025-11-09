@@ -39,11 +39,17 @@ final class ChatViewModel: ObservableObject {
         inputText = ""
         isLoading = true
 
-        // AIの応答を生成
+        // Foundation Modelsで応答を生成
+        // Foundation ModelsがTool Callingを使って、必要に応じてChatGPT APIを呼び出す
         Task {
             do {
-                let aiResponse = try await AIService.generateResponse(
-                    for: currentInput,
+                print("📨 [ChatViewModel] Sending message to Foundation Models Service")
+                print("📨 [ChatViewModel] Message: \(currentInput)")
+
+                // Foundation Models経由で応答を生成
+                // 内部で自動的にFoundation ModelsかChatGPT APIを選択
+                let aiResponse = try await FoundationModelsService.respond(
+                    to: currentInput,
                     conversationHistory: messages
                 )
 
@@ -55,8 +61,9 @@ final class ChatViewModel: ObservableObject {
                 )
 
                 messages.append(aiMessage)
+                print("✅ [ChatViewModel] Response added to messages")
             } catch {
-                print("❌ AI response generation failed: \(error)")
+                print("❌ [ChatViewModel] AI response generation failed: \(error)")
 
                 // エラー時のフォールバック応答
                 let errorMessage = ChatMessage(

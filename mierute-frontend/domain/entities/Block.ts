@@ -1,21 +1,23 @@
 export interface Block {
   id: string;
   checkpoint: string;
-  condition: string;
+  achievement: string;
   projectId: string;
-  imageUrl?: string;
+  img_url?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface CreateBlockInput {
   checkpoint: string;
-  condition: string;
+  achievement: string;
   projectId: string;
+  img_url?: string;
 }
 
 export interface UpdateBlockInput {
   id: string;
   checkpoint?: string;
-  condition?: string;
+  achievement?: string;
+  img_url?: string;
 }

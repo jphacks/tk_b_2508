@@ -23,8 +23,8 @@ export default function BlockItem({ block, onClick, onDelete }: BlockItemProps) 
         <div className="flex items-center gap-4">
           {/* Check Icon */}
           <div className="flex-shrink-0">
-            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#57CAEA20' }}>
+              <svg className="w-5 h-5" style={{ color: '#57CAEA' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
             </div>
@@ -33,7 +33,7 @@ export default function BlockItem({ block, onClick, onDelete }: BlockItemProps) 
           {/* Content */}
           <div className="flex-1 min-w-0">
             <p className="text-gray-800 font-medium">{block.checkpoint}</p>
-            <p className="text-sm text-gray-500 mt-1">{block.condition}</p>
+            <p className="text-sm text-gray-500 mt-1">{block.achievement}</p>
           </div>
 
           {/* Actions */}

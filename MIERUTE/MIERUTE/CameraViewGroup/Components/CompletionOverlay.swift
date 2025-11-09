@@ -18,7 +18,7 @@ struct CompletionOverlay: View {
             VStack(spacing: 30) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 80))
-                    .foregroundColor(.green)
+                    .foregroundColor(Color("AppCyan"))
 
                 Text("完了")
                     .font(.system(size: 48, weight: .bold))
@@ -34,7 +34,7 @@ struct CompletionOverlay: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 40)
                         .padding(.vertical, 16)
-                        .background(Color.blue)
+                        .background(Color("AppCyan"))
                         .cornerRadius(12)
                 }
                 .padding(.top, 20)

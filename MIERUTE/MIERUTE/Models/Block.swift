@@ -13,6 +13,7 @@ struct Block: Codable, Identifiable {
     let achievement: String?
     let projectId: String?
     let imageUrl: String?
+    let highlightColor: String?
     let createdAt: String?
     let updatedAt: String?
 
@@ -22,6 +23,7 @@ struct Block: Codable, Identifiable {
         case achievement
         case projectId
         case imageUrl
+        case highlightColor
         case createdAt
         case updatedAt
     }

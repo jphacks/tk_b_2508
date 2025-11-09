@@ -34,7 +34,7 @@ struct ShaderPreviewView: View {
                     RoundedRectangle(cornerRadius: 30)
                         .fill(
                             LinearGradient(
-                                colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)],
+                                colors: [Color("AppCyan").opacity(0.3), Color("AppOrange").opacity(0.3)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )

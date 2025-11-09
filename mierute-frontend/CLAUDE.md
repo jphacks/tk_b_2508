@@ -213,7 +213,7 @@ export interface CreateBlockResponse {
 // =========================
 export interface EditBlockRequest {
   checkpoint?: string;   // 本文更新
-  condition?: string;    // 達成条件更新
+  achievement?: string;    // 達成条件更新
   project_id?: Id<"project">; // プロジェクト移動（通常は使わない）
 }
 

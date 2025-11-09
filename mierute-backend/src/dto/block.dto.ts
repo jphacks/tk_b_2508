@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsUrl, IsArray } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateBlockDto {
@@ -16,8 +16,12 @@ export class CreateBlockDto {
 
   @IsOptional()
   @IsString()
-  @IsUrl()
-  img_url?: string;
+  color?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsUrl({}, { each: true })
+  reference_urls?: string[];
 }
 
 export class UpdateBlockDto extends PartialType(CreateBlockDto) {}
@@ -27,7 +31,8 @@ export class BlockResponseDto {
   checkpoint: string;
   achievement: string;
   projectId: string;
-  img_url?: string;
+  color?: string;
+  reference_urls?: string[];
   createdAt: string;
   updatedAt: string;
 }

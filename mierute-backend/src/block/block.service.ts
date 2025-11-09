@@ -129,7 +129,8 @@ export class BlockService {
       checkpoint: block.checkpoint as string,
       achievement: block.achievement as string,
       projectId: block.projectId as string,
-      img_url: block.img_url || null, // undefinedをnullに変換してJSONに確実に含める
+      color: block.color || undefined,
+      reference_urls: block.reference_urls || [], // 空配列をデフォルトとして返す
       createdAt: block.createdAt as string,
       updatedAt: block.updatedAt as string,
     };

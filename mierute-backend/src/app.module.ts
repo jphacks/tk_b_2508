@@ -8,6 +8,9 @@ import { ProjectModule } from './project/project.module';
 import { BlockModule } from './block/block.module';
 import { TaskPlanningModule } from './task-planning/task-planning.module';
 import { RagModule } from './rag/rag.module';
+import { AuthModule } from './auth/auth.module';
+import { CompanyModule } from './company/company.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { RagModule } from './rag/rag.module';
       envFilePath: '.env',
     }),
     FirebaseModule,
+    AuthModule,
+    CompanyModule,
+    UserModule,
     ImageRecognitionModule,
     ProjectModule,
     BlockModule,

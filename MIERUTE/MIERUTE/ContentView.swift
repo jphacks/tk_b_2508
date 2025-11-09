@@ -12,16 +12,18 @@ struct ContentView: View {
     @State private var showOnboarding = !OnboardingService.hasCompletedOnboarding()
 
     var body: some View {
-        Group {
-            if showOnboarding {
-                OnboardingView(onComplete: {
-                    OnboardingService.completeOnboarding()
-                    withAnimation {
-                        showOnboarding = false
-                    }
-                })
-            } else {
-                CameraView(viewModel: cameraViewModel)
+        ZStack {
+            Group {
+                if showOnboarding {
+                    OnboardingView(onComplete: {
+                        OnboardingService.completeOnboarding()
+                        withAnimation {
+                            showOnboarding = false
+                        }
+                    })
+                } else {
+                    CameraView(viewModel: cameraViewModel)
+                }
             }
         }
         .preferredColorScheme(.light)

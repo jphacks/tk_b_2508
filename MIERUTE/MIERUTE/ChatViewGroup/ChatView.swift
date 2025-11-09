@@ -45,7 +45,7 @@ struct ChatView: View {
                                     HStack(spacing: 8) {
                                         ForEach(0..<3) { index in
                                             Circle()
-                                                .fill(Color.blue.opacity(0.6))
+                                                .fill(Color("AppCyan").opacity(0.6))
                                                 .frame(width: 8, height: 8)
                                                 .scaleEffect(viewModel.isLoading ? 1.0 : 0.5)
                                                 .animation(

@@ -19,11 +19,14 @@ struct CameraView: View {
     @State private var capturedPhotoForDisplay: UIImage?
     @State private var showPhotoActions: Bool = false
     @State private var photoScale: CGFloat = 1.0
+    @State private var photoRotation: Double = 0
+    @State private var photoOffset: CGFloat = 0
     @State private var stepNodeHeight: CGFloat = 130
     @State private var cachedImage: UIImage?
     @State private var confettiTrigger: Int = 0
     @State private var hasDetectedGoodSign: Bool = OnboardingService.hasDetectedGoodSign()
     @State private var showManualCreation = false
+    @State private var capturedPhotos: [MediaItem] = []
 
     private var validStepNodeHeight: CGFloat {
         max(stepNodeHeight, 130)
@@ -35,9 +38,21 @@ struct CameraView: View {
                 cameraPreviewLayer
 
                 if let photo = capturedPhotoForDisplay {
+                    let highlightColor: Color? = {
+                        if case .displayingInstructions(let currentIndex) = viewModel.appState,
+                           currentIndex < viewModel.instructions.count,
+                           let colorHex = viewModel.instructions[currentIndex].highlightColor {
+                            return Color(hex: colorHex)
+                        }
+                        return nil
+                    }()
+
                     CapturedPhotoOverlay(
                         photo: photo,
+                        highlightColor: highlightColor,
                         photoScale: $photoScale,
+                        photoRotation: $photoRotation,
+                        photoOffset: $photoOffset,
                         rippleCounter: $rippleCounter,
                         rippleOrigin: $rippleOrigin
                     )
@@ -46,6 +61,13 @@ struct CameraView: View {
                 overlayContent
                 longPressGestureArea
                 referenceImageView
+
+                if !capturedPhotos.isEmpty {
+                    StackedMediaView(medias: capturedPhotos, onDelete: { index in
+                        capturedPhotos.remove(at: index)
+                    })
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
@@ -54,6 +76,7 @@ struct CameraView: View {
             .onDisappear { scannerService.stopScanning() }
             .onChange(of: scannerService.scannedCode, handleQRCodeScanned)
             .onChange(of: scannerService.capturedImage, handlePhotoCapture)
+            .onChange(of: viewModel.recognitionResult, handleRecognitionResult)
             .sheet(isPresented: .constant(viewModel.appState.isDisplayingInstructions)) {
                 instructionSheet
             }
@@ -207,7 +230,7 @@ struct CameraView: View {
         Button(action: confirmPhoto) {
             Image(systemName: "checkmark")
                 .font(.system(size: 18))
-                .foregroundColor(.blue)
+                .foregroundColor(Color("AppCyan"))
                 .symbolRenderingMode(.hierarchical)
         }
     }
@@ -252,6 +275,9 @@ struct CameraView: View {
 
         capturedPhotoForDisplay = image
         photoScale = 1.0
+
+        // 撮影した写真をcapturedPhotosに追加
+        capturedPhotos.append(.image(image))
 
         Task { @MainActor in
             withAnimation(.easeInOut(duration: 0.5)) {
@@ -332,6 +358,60 @@ struct CameraView: View {
             try? await Task.sleep(nanoseconds: 300_000_000)
             capturedPhotoForDisplay = nil
             photoScale = 1.0
+        }
+    }
+
+    private func handleRecognitionResult(_ oldValue: RecognitionResult?, _ newValue: RecognitionResult?) {
+        guard let result = newValue else { return }
+
+        Task { @MainActor in
+            switch result {
+            case .success:
+                // Success: ポップに消えて花吹雪
+                try? await Task.sleep(nanoseconds: 400_000_000)
+
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
+                    photoScale = 0.75
+                }
+
+                try? await Task.sleep(nanoseconds: 300_000_000)
+
+                confettiTrigger += 1
+
+                withAnimation(.easeOut(duration: 0.4)) {
+                    photoScale = 0
+                }
+
+                try? await Task.sleep(nanoseconds: 600_000_000)
+                capturedPhotoForDisplay = nil
+                photoScale = 1.0
+                photoRotation = 0
+                photoOffset = 0
+
+            case .failed:
+                // Failed: カッコンと傾いて落ちる
+                try? await Task.sleep(nanoseconds: 200_000_000)
+
+                withAnimation(.easeIn(duration: 0.2)) {
+                    photoRotation = -15
+                }
+
+                try? await Task.sleep(nanoseconds: 150_000_000)
+
+                withAnimation(.easeOut(duration: 0.8)) {
+                    photoRotation = -25
+                    photoOffset = 1200
+                    photoScale = 0.8
+                }
+
+                try? await Task.sleep(nanoseconds: 1_200_000_000)
+                capturedPhotoForDisplay = nil
+                photoScale = 1.0
+                photoRotation = 0
+                photoOffset = 0
+            }
+
+            viewModel.recognitionResult = nil
         }
     }
 

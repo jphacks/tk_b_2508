@@ -16,19 +16,19 @@ struct OnboardingView: View {
             title: "MIERUTEへようこそ",
             description: "",
             assetImage: "MIERUTELogo",
-            color: .blue
+            color: Color("AppCyan")
         ),
         OnboardingPage(
             title: "写真を撮影",
             description: "このアプリは読まずに、\n手順を知れるマニュアルアプリです\nまずは写真を撮影しましょう",
             systemImage: "camera.fill",
-            color: .green
+            color: Color("AppCyan")
         ),
         OnboardingPage(
             title: "さあ、始めよう！",
             description: "試しにグッドサインで撮影してみましょう！",
             systemImage: "checkmark.circle.fill",
-            color: .purple
+            color: Color("AppOrange")
         )
     ]
 
@@ -64,7 +64,7 @@ struct OnboardingView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
-                                .background(Color.blue)
+                                .background(Color("AppCyan"))
                                 .cornerRadius(12)
                         }
                     } else {
@@ -78,7 +78,7 @@ struct OnboardingView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
-                                .background(Color.blue)
+                                .background(Color("AppCyan"))
                                 .cornerRadius(12)
                         }
                     }

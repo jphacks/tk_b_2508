@@ -15,6 +15,7 @@ struct Instruction: Codable, Identifiable {
     var nextNodeId: String?
     var previousNodeId: String?
     var imageUrl: String?
+    var highlightColor: String?
 
     func encoded() throws -> Data {
         try JSONEncoder().encode(self)

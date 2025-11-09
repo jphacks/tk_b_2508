@@ -1,29 +1,28 @@
 import { useState, useEffect, useRef } from 'react';
 import { Block } from '@/domain/entities/Block';
-import { useBlockStore } from '@/presentation/stores/useBlockStore';
 import toast from 'react-hot-toast';
 
 interface BlockEditSidebarProps {
   isOpen: boolean;
   block: Block | null;
   onClose: () => void;
-  onSave: (id: string, checkpoint: string, condition: string) => void;
+  onSave: (id: string, checkpoint: string, achievement: string, img_url?: string) => void;
   onDelete: (id: string) => void;
 }
 
 export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDelete }: BlockEditSidebarProps) {
-  const { uploadingImage, uploadAndAddImage } = useBlockStore();
   const [checkpoint, setCheckpoint] = useState('');
-  const [condition, setCondition] = useState('');
+  const [achievement, setAchievement] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (block) {
       setCheckpoint(block.checkpoint);
-      setCondition(block.condition || '');
-      setPreviewUrl(block.imageUrl || null);
+      setAchievement(block.achievement || '');
+      setPreviewUrl(block.img_url || null);
     }
   }, [block]);
 
@@ -46,32 +45,35 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
     }
   };
 
-  const handleImageUpload = async () => {
-    if (!selectedImage || !block) {
-      toast.error('画像を選択してください');
-      return;
-    }
+
+  if (!isOpen || !block) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!checkpoint.trim()) return;
 
     try {
-      await uploadAndAddImage(block.id, selectedImage);
-      toast.success('画像を追加しました');
+      setUploading(true);
+      let uploadedImageUrl: string | undefined;
+
+      // Upload image if selected
+      if (selectedImage) {
+        const { StorageService } = await import('@/infrastructure/services/storage.service');
+        const storageService = new StorageService();
+        uploadedImageUrl = await storageService.uploadBlockImage(block.id, selectedImage);
+      }
+
+      onSave(block.id, checkpoint, achievement, uploadedImageUrl || block.img_url);
+      onClose();
       setSelectedImage(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : '画像のアップロードに失敗しました';
+      const message = error instanceof Error ? error.message : '保存に失敗しました';
       toast.error(message);
-    }
-  };
-
-  if (!isOpen || !block) return null;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (checkpoint.trim()) {
-      onSave(block.id, checkpoint, condition);
-      onClose();
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -91,10 +93,10 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
         }`}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4 flex justify-between items-center">
+        <div className="px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#57CAEA' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" style={{ color: '#57CAEA' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
@@ -122,7 +124,9 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
               value={checkpoint}
               onChange={(e) => setCheckpoint(e.target.value)}
               placeholder="例: 店舗の鍵を開ける"
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all"
+              style={{ '--tw-ring-color': '#57CAEA' } as React.CSSProperties}
+              onFocus={(e) => e.currentTarget.style.borderColor = '#57CAEA'}
               autoFocus
               required
             />
@@ -130,15 +134,17 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
           </div>
 
           <div>
-            <label htmlFor="edit-condition" className="block text-sm font-semibold text-gray-700 mb-2">
+            <label htmlFor="edit-achievement" className="block text-sm font-semibold text-gray-700 mb-2">
               達成条件 <span className="text-red-500">*</span>
             </label>
             <textarea
-              id="edit-condition"
-              value={condition}
-              onChange={(e) => setCondition(e.target.value)}
+              id="edit-achievement"
+              value={achievement}
+              onChange={(e) => setAchievement(e.target.value)}
               placeholder="例: 鍵が正しく開いていることを確認する"
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 transition-all resize-none"
+              style={{ '--tw-ring-color': '#57CAEA' } as React.CSSProperties}
+              onFocus={(e) => e.currentTarget.style.borderColor = '#57CAEA'}
               rows={3}
               required
             />
@@ -151,11 +157,11 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
               画像リファレンス（任意）
             </label>
 
-            {block.imageUrl && !selectedImage ? (
+            {block.img_url && !selectedImage ? (
               <div className="space-y-2">
                 <div className="w-full h-64 flex items-center justify-center bg-gray-50 rounded-lg border-2 border-gray-200">
                   <img
-                    src={block.imageUrl}
+                    src={block.img_url}
                     alt="Block Reference"
                     className="max-w-full max-h-full object-contain rounded-lg"
                   />
@@ -171,14 +177,7 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
                     className="max-w-full max-h-full object-contain rounded-lg"
                   />
                 </div>
-                <button
-                  type="button"
-                  onClick={handleImageUpload}
-                  disabled={uploadingImage}
-                  className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                  {uploadingImage ? 'アップロード中...' : '画像を追加'}
-                </button>
+                <p className="text-sm text-gray-500">選択済みの画像（保存時にアップロードされます）</p>
               </div>
             ) : (
               <input
@@ -186,7 +185,12 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold cursor-pointer"
+                style={{
+                  '--file-bg': '#57CAEA20',
+                  '--file-text': '#57CAEA',
+                  '--file-hover-bg': '#57CAEA30'
+                } as React.CSSProperties}
               />
             )}
             <p className="mt-2 text-sm text-gray-500">ブロックの参考画像をアップロードできます</p>
@@ -196,9 +200,13 @@ export default function BlockEditSidebar({ isOpen, block, onClose, onSave, onDel
           <div className="flex flex-col gap-3 pt-4">
             <button
               type="submit"
-              className="w-full px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium transition-colors shadow-lg"
+              disabled={uploading}
+              className="w-full px-6 py-3 text-white rounded-lg font-medium transition-colors shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+              style={{ backgroundColor: '#57CAEA' }}
+              onMouseEnter={(e) => !uploading && (e.currentTarget.style.backgroundColor = '#4AB8D8')}
+              onMouseLeave={(e) => !uploading && (e.currentTarget.style.backgroundColor = '#57CAEA')}
             >
-              保存
+              {uploading ? 'アップロード中...' : '保存'}
             </button>
             <button
               type="button"

@@ -39,12 +39,13 @@ export default function EditProjectPage() {
     }
   }, [projectId, fetchProjectById, fetchBlocks]);
 
-  const handleAddBlock = async (checkpoint: string, condition: string) => {
+  const handleAddBlock = async (checkpoint: string, achievement: string, img_url?: string) => {
     try {
       await createBlock({
         checkpoint,
-        condition,
+        achievement,
         projectId,
+        img_url,
       });
 
       toast.success('ブロックを追加しました');
@@ -54,9 +55,9 @@ export default function EditProjectPage() {
     }
   };
 
-  const handleUpdateBlock = async (id: string, checkpoint: string, condition: string) => {
+  const handleUpdateBlock = async (id: string, checkpoint: string, achievement: string, img_url?: string) => {
     try {
-      await updateBlock({ id, checkpoint, condition });
+      await updateBlock({ id, checkpoint, achievement, img_url });
       toast.success('ブロックを更新しました');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'ブロック更新に失敗しました';
@@ -82,13 +83,13 @@ export default function EditProjectPage() {
   if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2" style={{ borderColor: '#57CAEA' }}></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-blue-50 to-orange-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -106,7 +107,10 @@ export default function EditProjectPage() {
           </h1>
           <button
             onClick={() => setIsRagSidebarOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-md"
+            className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-colors shadow-md"
+            style={{ backgroundColor: '#57CAEA' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4AB8D8'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#57CAEA'}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -131,8 +135,8 @@ export default function EditProjectPage() {
           </>
         ) : (
           <div>
-            {blocks.map((block) => (
-              <div key={block.id}>
+            {blocks.map((block, index) => (
+              <div key={`${block.id}-${index}`}>
                 <BlockItem
                   block={block}
                   onClick={handleBlockClick}
@@ -152,6 +156,7 @@ export default function EditProjectPage() {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onAdd={handleAddBlock}
+          projectId={projectId}
         />
 
         <BlockEditSidebar

@@ -9,11 +9,17 @@ import Foundation
 import Combine
 import UIKit
 
+enum RecognitionResult {
+    case success
+    case failed
+}
+
 @MainActor
 final class CameraViewModel: ObservableObject {
     @Published var appState: AppState = .loading
     @Published var instructions: [Instruction] = []
     @Published var errorMessage: String?
+    @Published var recognitionResult: RecognitionResult?
 
     private var currentInstructionIndex: Int = 0
     private var cancellables = Set<AnyCancellable>()
@@ -182,11 +188,15 @@ final class CameraViewModel: ObservableObject {
             // successフィールドをチェック
             guard response.success else {
                 print("❌ [ViewModel] Recognition failed - success is false")
+                recognitionResult = .failed
                 errorMessage = "画像認識に失敗しました。もう一度お試しください"
                 appState = .displayingInstructions(currentIndex: currentInstructionIndex)
                 scannerService?.capturedImage = nil
                 return
             }
+
+            // 成功時
+            recognitionResult = .success
 
             // 最後のブロックかどうかをチェック
             let isLastBlock = currentInstructionIndex == instructions.count - 1
@@ -365,12 +375,38 @@ final class CameraViewModel: ObservableObject {
     }
 
     private func fetchInstructions(from qrCode: String) {
+        // サンプルQRコードをチェック
+        if let sampleQRCode = UserDefaults.standard.string(forKey: "sampleQRCode"),
+           sampleQRCode == qrCode {
+            print("📦 Loading sample data for QR: \(qrCode)")
+            loadSampleInstructions(qrCode: qrCode)
+            return
+        }
+
         // QRコードからプロジェクトIDを取得（現在は固定値、将来的にはQRコードから解析）
         let projectId = defaultProjectId
         print("📡 Fetching blocks for project ID: \(projectId) (from QR: \(qrCode))")
 
         Task {
             await loadInstructionsFromAPI()
+        }
+    }
+
+    private func loadSampleInstructions(qrCode: String) {
+        // UserDefaultsからサンプル手順データを読み込む
+        guard let instructionsData = UserDefaults.standard.data(forKey: "sampleInstructions_\(qrCode)"),
+              let sampleInstructions = try? JSONDecoder().decode([Instruction].self, from: instructionsData) else {
+            print("❌ Failed to load sample instructions")
+            appState = .scanning
+            errorMessage = "サンプルデータの読み込みに失敗しました"
+            return
+        }
+
+        DispatchQueue.main.async {
+            self.instructions = sampleInstructions
+            self.currentInstructionIndex = 0
+            self.appState = .displayingInstructions(currentIndex: 0)
+            print("✅ Loaded \(sampleInstructions.count) sample instructions")
         }
     }
 }

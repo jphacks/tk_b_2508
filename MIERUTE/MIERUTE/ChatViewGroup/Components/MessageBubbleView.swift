@@ -20,7 +20,7 @@ struct MessageBubbleView: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.6)],
+                                colors: [Color("AppCyan").opacity(0.8), Color("AppOrange").opacity(0.6)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
@@ -31,7 +31,7 @@ struct MessageBubbleView: View {
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.white)
                 }
-                .shadow(color: .blue.opacity(0.3), radius: 4, x: 0, y: 2)
+                .shadow(color: Color("AppCyan").opacity(0.3), radius: 4, x: 0, y: 2)
             }
 
             VStack(alignment: message.isUser ? .trailing : .leading, spacing: 6) {
@@ -44,7 +44,7 @@ struct MessageBubbleView: View {
                         Group {
                             if message.isUser {
                                 LinearGradient(
-                                    colors: [Color.blue, Color.blue.opacity(0.8)],
+                                    colors: [Color("AppCyan"), Color("AppCyan").opacity(0.8)],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
@@ -58,7 +58,7 @@ struct MessageBubbleView: View {
                     )
                     .shadow(
                         color: message.isUser
-                            ? Color.blue.opacity(0.3)
+                            ? Color("AppCyan").opacity(0.3)
                             : Color.black.opacity(0.08),
                         radius: message.isUser ? 8 : 4,
                         x: 0,
@@ -77,7 +77,7 @@ struct MessageBubbleView: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                colors: [Color.green.opacity(0.7), Color.teal.opacity(0.6)],
+                                colors: [Color("AppCyan").opacity(0.7), Color("AppCyan").opacity(0.5)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
@@ -88,7 +88,7 @@ struct MessageBubbleView: View {
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.white)
                 }
-                .shadow(color: .green.opacity(0.3), radius: 4, x: 0, y: 2)
+                .shadow(color: Color("AppCyan").opacity(0.3), radius: 4, x: 0, y: 2)
             } else {
                 Spacer(minLength: 50)
             }

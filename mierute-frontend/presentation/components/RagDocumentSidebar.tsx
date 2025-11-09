@@ -93,10 +93,10 @@ export default function RagDocumentSidebar({ isOpen, projectId, onClose }: RagDo
         }`}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4 flex justify-between items-center">
+        <div className="px-6 py-4 flex justify-between items-center" style={{ backgroundColor: '#57CAEA' }}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6" style={{ color: '#57CAEA' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
@@ -127,7 +127,12 @@ export default function RagDocumentSidebar({ isOpen, projectId, onClose }: RagDo
                 type="file"
                 accept="image/*,.md"
                 onChange={handleFileChange}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold cursor-pointer"
+                style={{
+                  '--file-bg': '#57CAEA20',
+                  '--file-text': '#57CAEA',
+                  '--file-hover-bg': '#57CAEA30'
+                } as React.CSSProperties}
               />
             </div>
 
@@ -154,7 +159,10 @@ export default function RagDocumentSidebar({ isOpen, projectId, onClose }: RagDo
             <button
               onClick={handleUpload}
               disabled={!selectedFile || uploading}
-              className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium transition-colors shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full px-6 py-3 text-white rounded-lg font-medium transition-colors shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+              style={{ backgroundColor: '#57CAEA' }}
+              onMouseEnter={(e) => !uploading && !(!selectedFile) && (e.currentTarget.style.backgroundColor = '#4AB8D8')}
+              onMouseLeave={(e) => !uploading && !(!selectedFile) && (e.currentTarget.style.backgroundColor = '#57CAEA')}
             >
               {uploading ? 'アップロード中...' : 'アップロード'}
             </button>
@@ -166,7 +174,7 @@ export default function RagDocumentSidebar({ isOpen, projectId, onClose }: RagDo
 
             {loading && (
               <div className="flex items-center justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: '#57CAEA' }}></div>
               </div>
             )}
 
@@ -196,8 +204,8 @@ export default function RagDocumentSidebar({ isOpen, projectId, onClose }: RagDo
                             className="w-24 h-24 object-cover rounded-lg border border-gray-200"
                           />
                         ) : (
-                          <div className="w-24 h-24 bg-purple-50 rounded-lg border border-gray-200 flex items-center justify-center">
-                            <svg className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="w-24 h-24 rounded-lg border border-gray-200 flex items-center justify-center" style={{ backgroundColor: '#57CAEA20' }}>
+                            <svg className="w-12 h-12" style={{ color: '#57CAEA' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                           </div>
@@ -208,7 +216,7 @@ export default function RagDocumentSidebar({ isOpen, projectId, onClose }: RagDo
                               {new Date(doc.createdAt).toLocaleDateString('ja-JP')}
                             </div>
                             {isMarkdown && (
-                              <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs rounded-full font-medium">
+                              <span className="px-2 py-0.5 text-xs rounded-full font-medium" style={{ backgroundColor: '#57CAEA20', color: '#57CAEA' }}>
                                 Markdown
                               </span>
                             )}
@@ -224,7 +232,7 @@ export default function RagDocumentSidebar({ isOpen, projectId, onClose }: RagDo
                             rel="noopener noreferrer"
                             className="text-purple-600 hover:text-purple-800 text-sm font-medium flex items-center gap-1"
                           >
-                            ファイルを表示
+                            ファイルを表示する
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>

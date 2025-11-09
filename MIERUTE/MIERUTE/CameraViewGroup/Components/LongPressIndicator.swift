@@ -29,7 +29,7 @@ struct LongPressIndicator: View {
                         .trim(from: 0, to: progress)
                         .stroke(
                             LinearGradient(
-                                colors: [.blue, .cyan],
+                                colors: [Color("AppCyan"), Color("AppCyan").opacity(0.7)],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             ),

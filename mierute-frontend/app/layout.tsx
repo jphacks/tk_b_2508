@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "MIERUTE - マニュアル作成ツール",
   description: "ブロックを組み合わせてマニュアルを作成",
+  icons: {
+    icon: '/log.png',
+    shortcut: '/log.png',
+    apple: '/log.png',
+  },
 };
 
 export default function RootLayout({

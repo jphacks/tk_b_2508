@@ -18,7 +18,7 @@ struct TutorialCompleteOverlay: View {
             VStack(spacing: 30) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 80))
-                    .foregroundColor(.green)
+                    .foregroundColor(Color("AppCyan"))
                     .symbolRenderingMode(.hierarchical)
 
                 Text("アプリをお楽しみください")
@@ -32,7 +32,7 @@ struct TutorialCompleteOverlay: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: 200)
                         .padding(.vertical, 16)
-                        .background(Color.blue)
+                        .background(Color("AppCyan"))
                         .cornerRadius(12)
                 }
                 .padding(.top, 10)

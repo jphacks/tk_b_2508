@@ -19,8 +19,15 @@ export class BlockRepository implements IBlockRepository {
   }
 
   async update(input: UpdateBlockInput): Promise<Block> {
-    const { id, ...data } = input;
-    const response = await apiClient.put<Block>(`/blocks/${id}`, data);
+    const { id, img_url, ...data } = input;
+    const payload: any = { ...data };
+
+    // Add img_url if provided
+    if (img_url !== undefined) {
+      payload.img_url = img_url;
+    }
+
+    const response = await apiClient.put<Block>(`/blocks/${id}`, payload);
     return this.mapToBlock(response.data);
   }
 
@@ -29,13 +36,17 @@ export class BlockRepository implements IBlockRepository {
   }
 
   async addImage(blockId: string, imageUrl: string): Promise<Block> {
-    const response = await apiClient.post<Block>(`/blocks/${blockId}/add_image`, { image_url: imageUrl });
+    const response = await apiClient.post<Block>(`/blocks/${blockId}/add_image`, { img_url: imageUrl });
     return this.mapToBlock(response.data);
   }
 
   private mapToBlock(data: any): Block {
     return {
-      ...data,
+      id: data.id,
+      checkpoint: data.checkpoint,
+      achievement: data.achievement || data.condition, // バックエンドのachivementをachievementにマップ
+      projectId: data.projectId,
+      img_url: data.img_url, // バックエンドのimg_url
       createdAt: new Date(data.createdAt),
       updatedAt: new Date(data.updatedAt),
     };

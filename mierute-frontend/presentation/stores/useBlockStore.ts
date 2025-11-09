@@ -36,7 +36,11 @@ export const useBlockStore = create<BlockState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const blocks = await blockUseCase.getBlocksByProjectId(projectId);
-      set({ blocks, loading: false });
+      // 重複IDを除去
+      const uniqueBlocks = blocks.filter((block, index, self) => 
+        index === self.findIndex(b => b.id === block.id)
+      );
+      set({ blocks: uniqueBlocks, loading: false });
     } catch (error: any) {
       set({
         error: error.message || 'Failed to fetch blocks',
@@ -50,7 +54,10 @@ export const useBlockStore = create<BlockState>((set, get) => ({
     try {
       const block = await blockUseCase.createBlock(input);
       set(state => ({
-        blocks: [...state.blocks, block],
+        // 重複IDをチェックして追加
+        blocks: state.blocks.some(b => b.id === block.id) 
+          ? state.blocks 
+          : [...state.blocks, block],
         loading: false
       }));
       return block;
